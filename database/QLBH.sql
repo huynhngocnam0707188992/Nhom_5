@@ -1,6 +1,6 @@
 -- 1 tạo 1 QLBH và sử dụng QLBH
 
-drop database qlbh;
+
 create database QLBH;
 
 use QLBH;
@@ -200,8 +200,8 @@ VALUES
 ('HD1', '2022-01-07', 'Khách A'),
 ('HD2', '2022-02-12', 'Khách B'),
 ('HD3', '2023-03-20', 'Khách C'),
-('HD4', '2023-12-25', 'Khách D'),
-('HD5', '2023-12-26', 'Khách E'),
+('HD4', '2023-01-01', 'Khách D'),
+('HD5', '2023-01-02', 'Khách E'),
 ('HD6', '2023-04-26', 'Khách F'),
 ('HD7', '2023-01-10', 'Khách G'),
 ('HD8', '2023-01-20', 'Khách H');
@@ -262,7 +262,6 @@ FROM (HANGHOA
 INNER JOIN CUNGUNG using(mahh))
 INNER JOIN NHACC using(mancc)
 WHERE  HANGHOA.SLTON BETWEEN 10 AND 20 and NHACC.MANCC IN ('Panasonic', 'Toshiba');
-
 SELECT HANGHOA.MAHH,HANGHOA.TENHH
 FROM HANGHOA
 JOIN CUNGUNG ON HANGHOA.MAHH = CUNGUNG.MAHH
@@ -344,14 +343,12 @@ FROM (
 ) AS InvoiceTotal;
 
 -- n)	In ra danh sách các mặt hàng có giá bán bằng 1 trong 3 mức giá cao nhất. 
-SELECT hanghoa.MAHH, hanghoa.TENHH, cthd.DONGIA
-FROM HANGHOA join cthd using(MAHH)
-WHERE DONGIA >= (
-    SELECT DISTINCT DONGIA
-    FROM CTHD
-    ORDER BY DONGIA DESC
-    LIMIT 1
-);
+SELECT TENHH, DONGIA
+FROM CTHD
+JOIN HANGHOA ON CTHD.MAHH = HANGHOA.MAHH
+ORDER BY DONGIA DESC
+LIMIT 3;
+
 
 -- o)	Cho biết tháng mấy trong năm 2022 có doanh thu bán hàng cao nhất.
 SELECT EXTRACT(MONTH FROM NGAYGH) AS Thang, SUM(SOLUONG * DONGIA) AS DoanhThu
